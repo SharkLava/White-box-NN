@@ -10,9 +10,9 @@
 \usepackage[normalem]{ulem}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{tikz}
 \usepackage{capt-of}
 \usepackage{hyperref}
-\author{Vishal Kalathil}
 \author{Vishal Kalathil}
 \date{\today}
 \title{White Box Neural Network}
@@ -20,7 +20,7 @@
  pdfauthor={Vishal Kalathil},
  pdftitle={White Box Neural Network},
  pdfkeywords={},
- pdfsubject={},
+ pdfsubject={ANN},
  pdfcreator={Emacs 28.2 (Org mode 9.6)}, 
  pdflang={English}}
 \usepackage{biblatex}
@@ -28,25 +28,22 @@
 \begin{document}
 
 \maketitle
-\tableofcontents
 
 
 
 \section{Introduction}
-\label{sec:orgb0af926}
 In this report I will go over my experiences with implementing a whitebox ANN in Rust.
 For this task I decided to create a simple neural network that would attempt to recognize the digits from the MNIST dataset.
 
 \section{Usage}
-\label{sec:org537ea94}
 Run
 \begin{verbatim}
   cargo run Cargo.toml
 \end{verbatim}
+after installing rust and cargo
 
 \section{Implementation}
-\label{sec:org3f5f05f}
-The ANN reads data from a modified version of the MNIST dataset that was converted into a file for easier reading. I also trained the model on the test dataset(which consisted of 10000 entries and tested the performance using the first 200 elements in the train data set, as I was running short of computational resources)
+The ANN reads data from a modified version of the MNIST dataset that was converted into a file for easier reading. I also trained the model on the test dataset (which consisted of 10000 entries and tested the performance using the first 200 elements in the train data set, as I was running short of computational resources)
 
 The ANN also has:
 \begin{itemize}
@@ -56,19 +53,34 @@ The ANN also has:
 \end{itemize}
 I also ended up using 2 different activation function combinations to see which one performed better.
 The first was the sigmoid function and the other was a combination of the ReLU function and the Softmax function.
-
+\newpage
 \section{Performance}
-\label{sec:org24f1928}
 At 1000 epochs with learning rate = 0.2
+\begin{longtable}{|l|l|l|}
+\caption{Accuracy metrics} \label{tab:long} \\
 
+\hline \multicolumn{1}{|c|}{\textbf{Activation Function}} & \multicolumn{1}{c|}{\textbf{Accuracy on Train Data}} & \multicolumn{1}{c|}{\textbf{Accuracy on Test Data}} \\ \hline
+\endfirsthead
+
+\multicolumn{3}{c}%
+{{\bfseries \tablename\ \thetable{}}} \\
+\hline \multicolumn{1}{|c|}{\textbf{}} & \multicolumn{1}{c|}{\textbf{Accuracy on Training Data`}} & \multicolumn{1}{c|}{\textbf{Accuracy on Test Data}} \\ \hline
+\endhead
+
+
+\hline
+\endlastfoot
+
+Sigmoid & 0.9213 & 0.915 \\
+ReLU + Softmax & abcdef ghjijklmn & 123.456778 \\
+\end{longtable}
 \section{Final Thoughts}
-\label{sec:org967720f}
 Despite the many, many places this project can be improved upon like
 \begin{enumerate}
 \item Multithreading
 \item Cleaner and more optimized code
 \item Fix all the warnings
-\item Build to a crate(?)
+\item Build to a crate (?)
 \item Use the actual dataset
 \item Use GPU throught the RustCUDA project
 \end{enumerate}
