@@ -1,0 +1,42 @@
+#+TITLE: White Box Neural Network
+#+LaTeX_CLASS_OPTIONS: [a4paper]
+#+LaTeX_HEADER: \author{Vishal Kalathil}
+
+
+* Introduction
+In this report I will go over my experiences with implementing a whitebox ANN in Rust.
+For this task I decided to create a simple neural network that would attempt to recognize the digits from the MNIST dataset.
+
+* Usage
+Run
+#+NAME: Running the NN
+#+BEGIN_SRC <bash>
+  cargo run Cargo.toml
+#+END_SRC
+
+* Implementation
+The ANN reads data from a modified version of the MNIST dataset that was converted into a src_<bash>{.csv} file for easier reading. I also trained the model on the test dataset(which consisted of 10000 entries and tested the performance using the first 200 elements in the train data set, as I was running short of computational resources)
+
+The ANN also has:
+- 28^2 nodes in the input layer
+- 10 nodes in the hidden layer
+- 10 nodes in the output layer
+
+  # Add the diagram here
+I also ended up using 2 different activation function combinations to see which one performed better.
+The first was the sigmoid function and the other was a combination of the ReLU function and the Softmax function.
+
+* Performance
+At 1000 epochs with learning rate = 0.2
+# insert table
+
+* Final Thoughts
+Despite the many, many places this project can be improved upon like
+1. Multithreading
+2. Cleaner and more optimized code
+3. Fix all the warnings
+4. Build to a crate(?)
+5. Use the actual dataset
+6. Use GPU throught the RustCUDA project
+
+The neural networks do perform decently well.

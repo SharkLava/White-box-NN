@@ -1,0 +1,77 @@
+% Created 2022-10-21 Fri 00:31
+% Intended LaTeX compiler: pdflatex
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Vishal Kalathil}
+\author{Vishal Kalathil}
+\date{\today}
+\title{White Box Neural Network}
+\hypersetup{
+ pdfauthor={Vishal Kalathil},
+ pdftitle={White Box Neural Network},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 28.2 (Org mode 9.6)}, 
+ pdflang={English}}
+\usepackage{biblatex}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+
+
+\section{Introduction}
+\label{sec:orgb0af926}
+In this report I will go over my experiences with implementing a whitebox ANN in Rust.
+For this task I decided to create a simple neural network that would attempt to recognize the digits from the MNIST dataset.
+
+\section{Usage}
+\label{sec:org537ea94}
+Run
+\begin{verbatim}
+  cargo run Cargo.toml
+\end{verbatim}
+
+\section{Implementation}
+\label{sec:org3f5f05f}
+The ANN reads data from a modified version of the MNIST dataset that was converted into a file for easier reading. I also trained the model on the test dataset(which consisted of 10000 entries and tested the performance using the first 200 elements in the train data set, as I was running short of computational resources)
+
+The ANN also has:
+\begin{itemize}
+\item 28\textsuperscript{2} nodes in the input layer
+\item 10 nodes in the hidden layer
+\item 10 nodes in the output layer
+\end{itemize}
+I also ended up using 2 different activation function combinations to see which one performed better.
+The first was the sigmoid function and the other was a combination of the ReLU function and the Softmax function.
+
+\section{Performance}
+\label{sec:org24f1928}
+At 1000 epochs with learning rate = 0.2
+
+\section{Final Thoughts}
+\label{sec:org967720f}
+Despite the many, many places this project can be improved upon like
+\begin{enumerate}
+\item Multithreading
+\item Cleaner and more optimized code
+\item Fix all the warnings
+\item Build to a crate(?)
+\item Use the actual dataset
+\item Use GPU throught the RustCUDA project
+\end{enumerate}
+
+The neural networks do perform decently well.
+\end{document}

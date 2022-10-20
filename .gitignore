@@ -1,2 +1,14 @@
 
 target/
+
+*.bcf
+
+*.log
+
+*.aux
+
+*.out
+
+*.xml
+
+*.toc
