@@ -255,7 +255,7 @@ fn run_network() {
     // println!("\n{}", &y_test);
     // println!("\n{}", &x);
 
-    let (w1, b1, w2, b2) = gradient_descent(&x, &y_train, 100, 0.3); // gradient_descent(x,y,inter,alpha)
+    let (w1, b1, w2, b2) = gradient_descent(&x, &y_train, 1000, 0.3); // gradient_descent(x,y,inter,alpha)
 
     let (z1, a1, z2, a2) = foward_prop(&x, &w1, &b1, &w2, &b2);
 
