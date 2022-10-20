@@ -18,7 +18,6 @@ use std::fs::File;
 fn l1_norm(x: ArrayView2<f64>) -> f64 {
     x.fold(0., |acc, elem| acc + elem.abs())
 }
-
 fn l2_norm(x: ArrayView1<f64>) -> f64 {
     x.dot(&x).abs()
 }
@@ -82,8 +81,7 @@ fn back_prop(
     let y_hot = one_hot(y);
     let d_z2 = a2 - y_hot;
     let d_w2 = 1.0 / m * (d_z2.dot(&a1.t()));
-    //let db2 = 1.0 / m * dz2.fold_axis(Axis(1),0.0, |a , i| arr1(&[a]) + i);
-    let db2 = Array::from_shape_vec(
+    let mut db2 = Array::from_shape_vec(
         (10, 1),
         (d_z2.fold_axis(Axis(1), 0.0, |a, i| a + i)).to_vec(),
     )
@@ -91,13 +89,13 @@ fn back_prop(
     let d_b2 = 1.0 / m * db2;
     let d_z1 = w2.t().dot(&d_z2) * (relu_dev(z1));
     let d_w1 = 1.0 / m * d_z1.dot(&x.t());
-    let d_b1 = Array::from_shape_vec(
+    let mut d_b1 = Array::from_shape_vec(
         (10, 1),
         (d_z1.fold_axis(Axis(1), 0.0, |a, i| a + i)).to_vec(),
     )
     .unwrap();
 
-    let _d_b1 = 1.0 / m * &d_b2;
+    let d_b1 = 1.0 / m * &d_b2;
     return (d_w1, d_b1, d_w2, d_b2);
 }
 
@@ -117,16 +115,16 @@ fn update_params(
     ndarray::Array2<f64>,
     ndarray::Array2<f64>,
 ) {
-    let w1_m = w1 - alpha * dw1;
-    let b1_m = b1 - alpha * db1;
-    let w2_m = w2 - alpha * dw2;
-    let b2_m = b2 - alpha * db2;
+    let mut w1_m = w1 - alpha * dw1;
+    let mut b1_m = b1 - alpha * db1;
+    let mut w2_m = w2 - alpha * dw2;
+    let mut b2_m = b2 - alpha * db2;
     return (w1_m, b1_m, w2_m, b2_m);
 }
 
 fn predictions(x: ndarray::Array2<f64>) -> ndarray::Array1<i32> {
-    let lenght = x.shape()[1];
-    let mut results = Array::<i32, _>::zeros(lenght);
+    let length = x.shape()[1];
+    let mut results = Array::<i32, _>::zeros(length);
     for (i, col) in x.axis_iter(Axis(1)).enumerate() {
         let (max_idx, _max_val) =
             col.iter()
@@ -156,10 +154,10 @@ fn gradient_descent(
 ) {
     let cols = x.shape()[1];
     println!("numbers of rows: {}", &cols);
-    let z1 = Array2::<f64>::zeros((10, cols));
-    let a1 = Array2::<f64>::zeros((10, cols));
-    let z2 = Array2::<f64>::zeros((10, cols));
-    let a2 = Array2::<f64>::zeros((10, cols));
+    let mut z1 = Array2::<f64>::zeros((10, cols));
+    let mut a1 = Array2::<f64>::zeros((10, cols));
+    let mut z2 = Array2::<f64>::zeros((10, cols));
+    let mut a2 = Array2::<f64>::zeros((10, cols));
     let mut foward_array = (z1, a1, z2, a2);
     let repeater = Array2::<f64>::ones((1, cols));
     let mut w1 = Array2::random((10, 784), Uniform::new(-0.5, 0.5));
@@ -257,9 +255,9 @@ fn run_network() {
     // println!("\n{}", &y_test);
     // println!("\n{}", &x);
 
-    let (w1, b1, w2, b2) = gradient_descent(&x, &y_train, 1000, 0.3); // gradient_descent(x,y,inter,alpha)
+    let (w1, b1, w2, b2) = gradient_descent(&x, &y_train, 100, 0.3); // gradient_descent(x,y,inter,alpha)
 
-    let (_z1, _a1, _z2, a2) = foward_prop(&x, &w1, &b1, &w2, &b2);
+    let (z1, a1, z2, a2) = foward_prop(&x, &w1, &b1, &w2, &b2);
 
     let y_pred = predictions(a2);
 
@@ -270,7 +268,7 @@ fn run_network() {
         .slice_axis(Axis(1), Slice::from(0..test_columns))
         .to_owned();
 
-    let (_z17, _a1t, _z2t, a2t) = foward_prop(&x_t, &w1, &b1_test, &w2, &b2_test);
+    let (z17, a1t, z2t, a2t) = foward_prop(&x_t, &w1, &b1_test, &w2, &b2_test);
 
     let y_pred_test = predictions(a2t);
 
